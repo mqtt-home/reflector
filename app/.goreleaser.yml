@@ -21,7 +21,7 @@ builds:
 
 dockers:
   - image_templates:
-      - "pharndt/reflector:{{ .Version }}-amd64"
+      - "pharndt/reflector:{{ .Tag }}-amd64"
     dockerfile: Dockerfile.goreleaser
     use: buildx
     goos: linux
@@ -31,7 +31,7 @@ dockers:
     skip_push: false
 
   - image_templates:
-      - "pharndt/reflector:{{ .Version }}-arm64"
+      - "pharndt/reflector:{{ .Tag }}-arm64"
     dockerfile: Dockerfile.goreleaser
     use: buildx
     goos: linux
@@ -42,16 +42,16 @@ dockers:
 
 docker_manifests:
   - id: tag
-    name_template: "pharndt/reflector:{{ .Version }}"
+    name_template: "pharndt/reflector:{{ .Tag }}"
     image_templates:
-      - pharndt/reflector:{{ .Version }}-amd64
-      - pharndt/reflector:{{ .Version }}-arm64
+      - pharndt/reflector:{{ .Tag }}-amd64
+      - pharndt/reflector:{{ .Tag }}-arm64
 
   - id: latest
     name_template: "pharndt/reflector:latest"
     image_templates:
-      - pharndt/reflector:{{ .Version }}-amd64
-      - pharndt/reflector:{{ .Version }}-arm64
+      - pharndt/reflector:{{ .Tag }}-amd64
+      - pharndt/reflector:{{ .Tag }}-arm64
 
 release:
   disable: false

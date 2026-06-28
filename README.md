@@ -109,7 +109,7 @@ can keep your existing release and only override the image:
 ```yaml
 image:
   repository: docker.io/pharndt/reflector
-  tag: "0.1.0"
+  tag: "v0.1.0"
 ```
 
 ## Architecture
