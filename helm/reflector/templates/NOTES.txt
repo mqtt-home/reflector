@@ -1,0 +1,22 @@
+reflector has been deployed.
+
+It watches Secrets, ConfigMaps and Namespaces cluster-wide and mirrors resources
+according to the reflector.v1.k8s.emberstack.com annotations — fully compatible
+with the original emberstack/kubernetes-reflector.
+
+Health endpoints (container port 8080):
+  - liveness:  /health/live
+  - readiness: /health/ready
+
+Mark a source Secret/ConfigMap so it can be reflected:
+
+  metadata:
+    annotations:
+      reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "team-.*"
+      reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
+      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "team-.*"
+
+Check the controller logs:
+
+  kubectl -n {{ include "reflector.namespace" . }} logs deploy/{{ include "reflector.fullname" . }}

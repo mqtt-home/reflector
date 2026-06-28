@@ -1,0 +1,96 @@
+# Default values for reflector.
+
+replicaCount: 1
+
+image:
+  repository: docker.io/pharndt/reflector
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+namespaceOverride: ""
+fullnameOverride: ""
+
+configuration:
+  logging:
+    # One of: Verbose, Debug, Information, Warning, Error (Serilog-compatible names
+    # are accepted for drop-in compatibility with the original chart).
+    minimumLevel: Information
+  watcher:
+    # Watch/resync timeout in seconds. Empty uses the default (3600).
+    timeout: ""
+    # Comma-separated list of namespace glob patterns to exclude from reflection.
+    # Supports wildcards: * (any characters), ? (single character).
+    # Example: "kube-system,*-temp,prefix-*"
+    excludedNamespaces: ""
+  kubernetes:
+    skipTlsVerify: false
+
+rbac:
+  enabled: true
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+extraEnv: []
+
+podSecurityContext:
+  fsGroup: 2000
+
+securityContext:
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+
+livenessProbe:
+  httpGet:
+    path: /health/live
+    port: http
+  timeoutSeconds: 10
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  failureThreshold: 5
+readinessProbe:
+  httpGet:
+    path: /health/ready
+    port: http
+  timeoutSeconds: 10
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  failureThreshold: 5
+startupProbe:
+  httpGet:
+    path: /health/ready
+    port: http
+  timeoutSeconds: 10
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  failureThreshold: 30
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 64Mi
+  requests:
+    cpu: 10m
+    memory: 24Mi
+
+autoscaling:
+  enabled: false
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+topologySpreadConstraints: []
+priorityClassName: ""
+volumes: []
+volumeMounts: []

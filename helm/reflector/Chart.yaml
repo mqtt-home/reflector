@@ -1,0 +1,16 @@
+apiVersion: v2
+name: reflector
+description: A lightweight Go reimplementation of emberstack/kubernetes-reflector that mirrors Secrets and ConfigMaps across namespaces.
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - reflector
+  - secrets
+  - configmaps
+  - namespaces
+home: https://github.com/mqtt-home/reflector
+sources:
+  - https://github.com/mqtt-home/reflector
+maintainers:
+  - name: Philipp Arndt

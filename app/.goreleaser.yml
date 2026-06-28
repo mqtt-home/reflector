@@ -1,0 +1,62 @@
+project_name: reflector
+version: 2
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: reflector
+    main: ./main.go
+    binary: reflector
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w -X github.com/mqtt-home/reflector/version.Version={{.Version}} -X github.com/mqtt-home/reflector/version.GitCommit={{.Commit}} -X github.com/mqtt-home/reflector/version.BuildTime={{.Date}}
+
+dockers:
+  - image_templates:
+      - "pharndt/reflector:{{ .Version }}-amd64"
+    dockerfile: Dockerfile.goreleaser
+    use: buildx
+    goos: linux
+    goarch: amd64
+    build_flag_templates:
+      - "--platform=linux/amd64"
+    skip_push: false
+
+  - image_templates:
+      - "pharndt/reflector:{{ .Version }}-arm64"
+    dockerfile: Dockerfile.goreleaser
+    use: buildx
+    goos: linux
+    goarch: arm64
+    build_flag_templates:
+      - "--platform=linux/arm64"
+    skip_push: false
+
+docker_manifests:
+  - id: tag
+    name_template: "pharndt/reflector:{{ .Version }}"
+    image_templates:
+      - pharndt/reflector:{{ .Version }}-amd64
+      - pharndt/reflector:{{ .Version }}-arm64
+
+  - id: latest
+    name_template: "pharndt/reflector:latest"
+    image_templates:
+      - pharndt/reflector:{{ .Version }}-amd64
+      - pharndt/reflector:{{ .Version }}-arm64
+
+release:
+  disable: false
+  mode: replace
+  draft: false
+  prerelease: auto
+  make_latest: true
+  skip_upload: true

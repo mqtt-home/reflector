@@ -1,0 +1,14 @@
+# syntax=docker/dockerfile:1.17
+
+# Final stage - only for the pre-built binary from GoReleaser
+FROM gcr.io/distroless/static:nonroot
+
+WORKDIR /
+
+COPY reflector /reflector
+
+EXPOSE 8080
+
+USER nonroot:nonroot
+
+ENTRYPOINT ["/reflector"]
